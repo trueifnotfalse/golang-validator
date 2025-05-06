@@ -4,7 +4,9 @@ import (
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/rule/date"
 	"github.com/trueifnotfalse/golang-validator/rule/each"
+	"github.com/trueifnotfalse/golang-validator/rule/empty"
 	"github.com/trueifnotfalse/golang-validator/rule/in"
+	"github.com/trueifnotfalse/golang-validator/rule/notEmpty"
 	"github.com/trueifnotfalse/golang-validator/rule/required"
 	"github.com/trueifnotfalse/golang-validator/rule/types/array"
 	"github.com/trueifnotfalse/golang-validator/rule/types/boolean"
@@ -77,10 +79,18 @@ func Required() rule.Interface {
 	return required.New()
 }
 
-func Each(rules []rule.Interface) rule.Interface {
-	return each.New(rules)
+func Each(rules ...rule.Interface) rule.Interface {
+	return each.New(rules...)
 }
 
 func In[V int64 | int32 | int16 | int8 | uint64 | uint32 | uint16 | uint8 | string](v []V) rule.Interface  {
 	return in.New(v)
+}
+
+func Empty() rule.Interface {
+	return empty.New()
+}
+
+func NotEmpty() rule.Interface {
+	return notEmpty.New()
 }

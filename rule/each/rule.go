@@ -11,7 +11,7 @@ type Rule struct {
 	rules   []rule.Interface
 }
 
-func New(rules []rule.Interface) rule.Interface {
+func New(rules ...rule.Interface ) rule.Interface {
 	return &Rule{
 		message: "The %s must be an array.",
 		rules:   rules,
@@ -33,11 +33,12 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	var (
 		j   int
 		err error
+		k string
 	)
 	for i := 0; i < s.Len(); i++ {
 		for j = 0; j < len(r.rules); j++ {
-			key = fmt.Sprintf("%s.%d", key, i)
-			err = r.rules[j].Valid(key, map[string]any{key: s.Index(i).Interface()})
+			k = fmt.Sprintf("%s.%d", key, i)
+			err = r.rules[j].Valid(k, map[string]any{k: s.Index(i).Interface()})
 			if err != nil {
 				return err
 			}
