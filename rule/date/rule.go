@@ -26,7 +26,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	_, err := time.Parse(r.format, utils.ToString(v))
 	if err != nil {
-		return fmt.Errorf(fmt.Sprintf(r.message, key, r.format))
+		return fmt.Errorf(r.message, key, r.format)
 	}
 
 	return nil

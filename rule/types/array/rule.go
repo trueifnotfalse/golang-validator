@@ -21,7 +21,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 		return nil
 	}
 	if !utils.IsArray(v) {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 
 	return nil

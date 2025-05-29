@@ -19,18 +19,18 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 		return nil
 	}
 	if utils.IsString(v) {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 	i, ok := utils.ToInt(utils.ToString(v))
 	if !ok {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 	if i < r.min {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 
 	if i > r.max {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 
 	return nil

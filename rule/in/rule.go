@@ -52,7 +52,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	actual := reflect.ValueOf(v)
 	if actual.Kind() == reflect.Slice || actual.Kind() == reflect.Array || actual.Kind() == reflect.Map {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 	t := reflect.Bool
 	s := utils.ToString(v)
@@ -70,5 +70,5 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 		return nil
 	}
 
-	return fmt.Errorf(fmt.Sprintf(r.message, key))
+	return fmt.Errorf(r.message, key)
 }

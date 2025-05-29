@@ -18,7 +18,7 @@ func New() rule.Interface {
 func (r *Rule) Valid(key string, values map[string]any) error {
 	_, ok := values[key]
 	if !ok {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 
 	return nil

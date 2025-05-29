@@ -5,21 +5,21 @@ import (
 	"encoding/json"
 )
 
-func Validate(body []byte, rules Rules) map[string][]error {
+func Validate(body []byte, rules Rules) Errors {
 	t, err := decodeBody(body)
 	if err != nil {
-		return map[string][]error{"0": {err}}
+		return Errors{"0": {err}}
 	}
 
 	return Map(t, rules)
 }
 
-func Map(values map[string]any, rules Rules) map[string][]error {
+func Map(values map[string]any, rules Rules) Errors {
 	var (
 		err error
 		i   int
 	)
-	result := make(map[string][]error)
+	result := make(Errors)
 	for k, rl := range rules {
 		for i = 0; i < len(rl); i++ {
 			err = rl[i].Valid(k, values)

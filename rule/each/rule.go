@@ -25,7 +25,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	s := reflect.ValueOf(v)
 	if s.Kind() != reflect.Slice {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 	if s.IsNil() {
 		return nil

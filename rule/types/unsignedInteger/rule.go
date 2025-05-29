@@ -19,10 +19,10 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	i, ok := utils.ToUInt(utils.ToString(v))
 	if !ok {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 	if i > r.max {
-		return fmt.Errorf(fmt.Sprintf(r.message, key))
+		return fmt.Errorf(r.message, key)
 	}
 
 	return nil
