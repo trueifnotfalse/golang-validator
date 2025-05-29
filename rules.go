@@ -4,6 +4,8 @@ import (
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/rule/date"
 	"github.com/trueifnotfalse/golang-validator/rule/each"
+	"github.com/trueifnotfalse/golang-validator/rule/max"
+	"github.com/trueifnotfalse/golang-validator/rule/min"
 	"github.com/trueifnotfalse/golang-validator/rule/empty"
 	"github.com/trueifnotfalse/golang-validator/rule/in"
 	"github.com/trueifnotfalse/golang-validator/rule/notEmpty"
@@ -93,4 +95,12 @@ func Empty() rule.Interface {
 
 func NotEmpty() rule.Interface {
 	return notEmpty.New()
+}
+
+func Max(v int64) rule.Interface {
+	return max.New(v)
+}
+
+func Min(v int64) rule.Interface {
+	return min.New(v)
 }
