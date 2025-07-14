@@ -4,10 +4,10 @@ import (
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/rule/date"
 	"github.com/trueifnotfalse/golang-validator/rule/each"
+	"github.com/trueifnotfalse/golang-validator/rule/empty"
+	v4 "github.com/trueifnotfalse/golang-validator/rule/ip/v4"
 	"github.com/trueifnotfalse/golang-validator/rule/max"
 	"github.com/trueifnotfalse/golang-validator/rule/min"
-	"github.com/trueifnotfalse/golang-validator/rule/empty"
-	"github.com/trueifnotfalse/golang-validator/rule/in"
 	"github.com/trueifnotfalse/golang-validator/rule/notEmpty"
 	"github.com/trueifnotfalse/golang-validator/rule/required"
 	"github.com/trueifnotfalse/golang-validator/rule/types/array"
@@ -17,6 +17,7 @@ import (
 	"github.com/trueifnotfalse/golang-validator/rule/types/object"
 	"github.com/trueifnotfalse/golang-validator/rule/types/str"
 	"github.com/trueifnotfalse/golang-validator/rule/types/unsignedInteger"
+	"github.com/trueifnotfalse/golang-validator/rule/url/http"
 )
 
 type Rules map[string][]rule.Interface
@@ -103,4 +104,12 @@ func Max(v int64) rule.Interface {
 
 func Min(v int64) rule.Interface {
 	return min.New(v)
+}
+
+func HttpUrl() rule.Interface {
+	return http.New()
+}
+
+func IpV4() rule.Interface {
+	return v4.New()
 }
