@@ -10,6 +10,7 @@ import (
 	"github.com/trueifnotfalse/golang-validator/rule/max"
 	"github.com/trueifnotfalse/golang-validator/rule/min"
 	"github.com/trueifnotfalse/golang-validator/rule/notEmpty"
+	"github.com/trueifnotfalse/golang-validator/rule/nullable"
 	"github.com/trueifnotfalse/golang-validator/rule/required"
 	"github.com/trueifnotfalse/golang-validator/rule/types/array"
 	"github.com/trueifnotfalse/golang-validator/rule/types/boolean"
@@ -113,4 +114,8 @@ func HttpUrl() rule.Interface {
 
 func IpV4() rule.Interface {
 	return v4.New()
+}
+
+func Nullable(rules ...rule.Interface) rule.Interface {
+	return nullable.New(rules...)
 }
