@@ -6,6 +6,9 @@ import (
 )
 
 func Validate(body []byte, rules Rules) Errors {
+	if len(body) == 0 {
+		return nil
+	}
 	t, err := decodeBody(body)
 	if err != nil {
 		return Errors{"0": {err}}
