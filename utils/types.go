@@ -27,6 +27,60 @@ func ToString(v any) string {
 	return str
 }
 
+func ToMap(v any) (map[string]any, bool) {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Map {
+		return nil, false
+	}
+	keys := rv.MapKeys()
+	if len(keys) == 0 {
+		return nil, false
+	}
+	result := make(map[string]any)
+	for i := 0; i < len(keys); i++ {
+		result[keys[i].String()] = rv.MapIndex(keys[i]).Interface()
+	}
+
+	return result, true
+}
+
+func ToFloat64Slice(v any) ([]float64, bool) {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Array && rv.Kind() != reflect.Slice {
+		return nil, false
+	}
+	l := rv.Len()
+	result := make([]float64, l)
+	var (
+		f  float64
+		ok bool
+	)
+	for i := 0; i < l; i++ {
+		v = rv.Index(i).Interface()
+		f, ok = ToFloat(ToString(v))
+		if !ok {
+			return nil, false
+		}
+		result[i] = f
+	}
+
+	return result, true
+}
+
+func ToSlice(v any) ([]any, bool) {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Array && rv.Kind() != reflect.Slice {
+		return nil, false
+	}
+	l := rv.Len()
+	result := make([]any, l)
+	for i := 0; i < l; i++ {
+		result[i] = rv.Index(i).Interface()
+	}
+
+	return result, true
+}
+
 func ToInt(v string) (int64, bool) {
 	if !isType(v, integer) {
 		return 0, false
@@ -78,28 +132,28 @@ func isType(v string, re string) bool {
 
 func IsArray(v any) bool {
 	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Array, reflect.Slice:
+	if rv.Kind() == reflect.Array || rv.Kind() == reflect.Slice {
 		return true
 	}
+
 	return false
 }
 
 func IsMap(v any) bool {
 	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Map:
+	if rv.Kind() == reflect.Map {
 		return true
 	}
+
 	return false
 }
 
 func IsBool(v any) bool {
 	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Bool:
+	if rv.Kind() == reflect.Bool {
 		return true
 	}
+
 	return false
 }
 
@@ -107,7 +161,7 @@ func Type(v any) reflect.Kind {
 	s := ToString(v)
 	if IsString(v) {
 		return reflect.String
-	}  else if IsUInt(s) {
+	} else if IsUInt(s) {
 		return reflect.Uint
 	} else if IsInt(s) {
 		return reflect.Int

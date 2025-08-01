@@ -2,7 +2,7 @@ package nullable
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/trueifnotfalse/golang-validator/rule/date"
+	"github.com/trueifnotfalse/golang-validator/rule/types/date"
 	"github.com/trueifnotfalse/golang-validator/rule/types/str"
 	"testing"
 	"time"

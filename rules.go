@@ -2,11 +2,9 @@ package validator
 
 import (
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
-	"github.com/trueifnotfalse/golang-validator/rule/date"
 	"github.com/trueifnotfalse/golang-validator/rule/each"
 	"github.com/trueifnotfalse/golang-validator/rule/empty"
 	"github.com/trueifnotfalse/golang-validator/rule/in"
-	"github.com/trueifnotfalse/golang-validator/rule/ip/v4"
 	"github.com/trueifnotfalse/golang-validator/rule/max"
 	"github.com/trueifnotfalse/golang-validator/rule/min"
 	"github.com/trueifnotfalse/golang-validator/rule/notEmpty"
@@ -14,12 +12,15 @@ import (
 	"github.com/trueifnotfalse/golang-validator/rule/required"
 	"github.com/trueifnotfalse/golang-validator/rule/types/array"
 	"github.com/trueifnotfalse/golang-validator/rule/types/boolean"
+	"github.com/trueifnotfalse/golang-validator/rule/types/date"
 	"github.com/trueifnotfalse/golang-validator/rule/types/float"
+	"github.com/trueifnotfalse/golang-validator/rule/types/geojson"
 	"github.com/trueifnotfalse/golang-validator/rule/types/integer"
+	"github.com/trueifnotfalse/golang-validator/rule/types/ip/v4"
 	"github.com/trueifnotfalse/golang-validator/rule/types/object"
 	"github.com/trueifnotfalse/golang-validator/rule/types/str"
 	"github.com/trueifnotfalse/golang-validator/rule/types/unsignedInteger"
-	"github.com/trueifnotfalse/golang-validator/rule/url/http"
+	"github.com/trueifnotfalse/golang-validator/rule/types/url/http"
 )
 
 type Rules map[string][]rule.Interface
@@ -118,4 +119,36 @@ func IpV4() rule.Interface {
 
 func Nullable(rules ...rule.Interface) rule.Interface {
 	return nullable.New(rules...)
+}
+
+func GeoJSON(typeList ...string) rule.Interface {
+	return geojson.New(typeList...)
+}
+
+func GeoJSONFeatureCollection() rule.Interface {
+	return geojson.NewFeatureCollection()
+}
+
+func GeoJSONPoint() rule.Interface {
+	return geojson.NewPoint()
+}
+
+func GeoJSONLineString() rule.Interface {
+	return geojson.NewLineString()
+}
+
+func GeoJSONPolygon() rule.Interface {
+	return geojson.NewPolygon()
+}
+
+func GeoJSONMultiPoint() rule.Interface {
+	return geojson.NewMultiPoint()
+}
+
+func GeoJSONMultiLineString() rule.Interface {
+	return geojson.NewMultiLineString()
+}
+
+func GeoJSONMultiPolygon() rule.Interface {
+	return geojson.NewMultiPolygon()
 }

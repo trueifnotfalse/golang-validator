@@ -2,7 +2,7 @@ package validator
 
 import (
 	"bytes"
-	"encoding/json"
+	"github.com/goccy/go-json"
 )
 
 func Validate(body []byte, rules Rules) Errors {
