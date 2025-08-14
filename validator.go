@@ -6,10 +6,14 @@ import (
 )
 
 func Validate(body []byte, rules Rules) Errors {
+	var (
+		t   map[string]any
+		err error
+	)
 	if len(body) == 0 {
-		return nil
+		return Map(t, rules)
 	}
-	t, err := decodeBody(body)
+	t, err = decodeBody(body)
 	if err != nil {
 		return Errors{"0": {err}}
 	}

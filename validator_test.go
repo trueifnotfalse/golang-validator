@@ -44,3 +44,27 @@ func TestValidateNegative(t *testing.T) {
 	assert.Equal(t, "The age must be an uint8.", errs["age"][0].Error())
 	assert.Equal(t, "The selected gender is invalid.", errs["gender"][0].Error())
 }
+
+func TestValidateEmptyDataPositive(t *testing.T) {
+	testData := map[string]any{}
+	d, err := json.Marshal(testData)
+	assert.Nil(t, err)
+	rl := map[string][]rule.Interface{
+		"name": {String()},
+		"age":  {UInt8()},
+	}
+	errs := Validate(d, rl)
+	assert.Equal(t, 0, len(errs))
+}
+
+func TestValidateEmptyDataNegative(t *testing.T) {
+	testData := map[string]any{}
+	d, err := json.Marshal(testData)
+	assert.Nil(t, err)
+	rl := map[string][]rule.Interface{
+		"name": {Required(), String()},
+		"age":  {UInt8()},
+	}
+	errs := Validate(d, rl)
+	assert.NotEqual(t, 0, len(errs))
+}
