@@ -48,6 +48,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 		return nil
 	}
 	r.message = fmt.Sprintf(r.message, key)
+	r.wrongTypeMessage = fmt.Sprintf(r.wrongTypeMessage, key)
 	m, ok := utils.ToMap(v)
 	if !ok {
 		return errors.New(r.message)

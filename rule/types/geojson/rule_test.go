@@ -34,7 +34,7 @@ func TestPointNegativeType(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The %s has wrong GeoJSON type.", err.Error())
+		assert.Equal(t, "The key has wrong GeoJSON type.", err.Error())
 	}
 }
 
