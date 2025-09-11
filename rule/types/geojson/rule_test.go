@@ -20,6 +20,24 @@ func TestPointPositive(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestPointNegativeType(t *testing.T) {
+	testData := map[string]any{
+		"key": map[string]any{
+			"type": "Feature",
+			"geometry": map[string]any{
+				"type":        "Point",
+				"coordinates": []any{4, 3},
+			},
+		},
+	}
+	r := New(Polygon)
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "The %s has wrong GeoJSON type.", err.Error())
+	}
+}
+
 func TestPointNegative(t *testing.T) {
 	testData := map[string]any{
 		"key": map[string]any{

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/trueifnotfalse/golang-validator/utils"
+	"slices"
 )
 
 const (
@@ -18,14 +19,26 @@ const (
 )
 
 type Rule struct {
-	typeList []string
-	message  string
+	typeList         []string
+	message          string
+	wrongTypeMessage string
 }
 
 func New(typeList ...string) *Rule {
+	if len(typeList) == 0 {
+		typeList = []string{
+			Point,
+			LineString,
+			Polygon,
+			MultiPoint,
+			MultiLineString,
+			MultiPolygon,
+		}
+	}
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON.",
-		typeList: typeList,
+		message:          "The %s must be an valid GeoJSON.",
+		wrongTypeMessage: "The %s has wrong GeoJSON type.",
+		typeList:         typeList,
 	}
 }
 
@@ -97,6 +110,9 @@ func (r *Rule) validateGeometry(v any) error {
 		return errors.New(r.message)
 	}
 	t := utils.ToString(v)
+	if !slices.Contains(r.typeList, t) {
+		return errors.New(r.wrongTypeMessage)
+	}
 	v, ok = m["coordinates"]
 	if !ok {
 		return errors.New(r.message)
