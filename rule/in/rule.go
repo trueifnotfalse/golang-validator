@@ -1,20 +1,23 @@
 package in
 
 import (
+	"errors"
 	"fmt"
+	"github.com/trueifnotfalse/golang-validator/interface/locale"
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/utils"
 	"reflect"
 )
 
 type Rule struct {
+	loc     locale.Interface
 	message string
 	f       func(value any, t reflect.Kind) bool
 }
 
 func New[V int64 | int32 | int16 | int8 | uint64 | uint32 | uint16 | uint8 | string](v []V) rule.Interface {
 	return &Rule{
-		message: "The selected %s is invalid.",
+		message: "in",
 		f: func(value any, t reflect.Kind) bool {
 			if len(v) == 0 {
 				return false
@@ -45,6 +48,11 @@ func New[V int64 | int32 | int16 | int8 | uint64 | uint32 | uint16 | uint8 | str
 	}
 }
 
+func (r *Rule) SetLocale(v locale.Interface) rule.Interface {
+	r.loc = v
+	return r
+}
+
 func (r *Rule) Valid(key string, values map[string]any) error {
 	v, ok := values[key]
 	if !ok {
@@ -52,7 +60,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	actual := reflect.ValueOf(v)
 	if actual.Kind() == reflect.Slice || actual.Kind() == reflect.Array || actual.Kind() == reflect.Map {
-		return fmt.Errorf(r.message, key)
+		return errors.New(r.getErrorMessage(key))
 	}
 	t := reflect.Bool
 	s := utils.ToString(v)
@@ -65,10 +73,17 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	} else if utils.IsInt(s) {
 		t = reflect.Int64
 	}
-
 	if r.f(v, t) {
 		return nil
 	}
 
-	return fmt.Errorf(r.message, key)
+	return errors.New(r.getErrorMessage(key))
+}
+
+func (r *Rule) getErrorMessage(key string) string {
+	if r.loc == nil {
+		return r.message
+	}
+
+	return fmt.Sprintf(r.loc.Translate(r.message), key)
 }

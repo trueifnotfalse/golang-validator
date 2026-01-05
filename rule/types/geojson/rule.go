@@ -3,6 +3,8 @@ package geojson
 import (
 	"errors"
 	"fmt"
+	"github.com/trueifnotfalse/golang-validator/interface/locale"
+	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/utils"
 	"slices"
 )
@@ -19,12 +21,13 @@ const (
 )
 
 type Rule struct {
+	loc              locale.Interface
 	typeList         []string
 	message          string
 	wrongTypeMessage string
 }
 
-func New(typeList ...string) *Rule {
+func New(typeList ...string) rule.Interface {
 	if len(typeList) == 0 {
 		typeList = []string{
 			Point,
@@ -36,10 +39,15 @@ func New(typeList ...string) *Rule {
 		}
 	}
 	return &Rule{
-		message:          "The %s must be an valid GeoJSON.",
-		wrongTypeMessage: "The %s has wrong GeoJSON type.",
+		message:          "types.geojson.valid",
+		wrongTypeMessage: "types.geojson.type",
 		typeList:         typeList,
 	}
+}
+
+func (r *Rule) SetLocale(v locale.Interface) rule.Interface {
+	r.loc = v
+	return r
 }
 
 func (r *Rule) Valid(key string, values map[string]any) error {
@@ -47,8 +55,8 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	if !ok {
 		return nil
 	}
-	r.message = fmt.Sprintf(r.message, key)
-	r.wrongTypeMessage = fmt.Sprintf(r.wrongTypeMessage, key)
+	r.message = r.getErrorMessage(r.message, key)
+	r.wrongTypeMessage = r.getErrorMessage(r.wrongTypeMessage, key)
 	m, ok := utils.ToMap(v)
 	if !ok {
 		return errors.New(r.message)
@@ -275,51 +283,59 @@ func (r *Rule) getCoordinatesAsSlice(v any) ([]any, error) {
 	return s, nil
 }
 
-func NewFeatureCollection() *Rule {
+func NewFeatureCollection() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON FeatureCollection.",
+		message:  "types.geojson.feature.collection",
 		typeList: []string{FeatureCollection},
 	}
 }
 
-func NewPoint() *Rule {
+func NewPoint() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON Point.",
+		message:  "types.geojson.point",
 		typeList: []string{Point},
 	}
 }
 
-func NewLineString() *Rule {
+func NewLineString() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON LineString.",
+		message:  "types.geojson.line.string",
 		typeList: []string{LineString},
 	}
 }
 
-func NewPolygon() *Rule {
+func NewPolygon() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON Polygon.",
+		message:  "types.geojson.polygon",
 		typeList: []string{Polygon},
 	}
 }
 
-func NewMultiPoint() *Rule {
+func NewMultiPoint() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON MultiPoint.",
+		message:  "types.geojson.multi.point",
 		typeList: []string{MultiPoint},
 	}
 }
 
-func NewMultiLineString() *Rule {
+func NewMultiLineString() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON MultiLineString.",
+		message:  "types.geojson.multi.line.string",
 		typeList: []string{MultiLineString},
 	}
 }
 
-func NewMultiPolygon() *Rule {
+func NewMultiPolygon() rule.Interface {
 	return &Rule{
-		message:  "The %s must be an valid GeoJSON MultiPolygon.",
+		message:  "types.geojson.multi.polygon",
 		typeList: []string{MultiPolygon},
 	}
+}
+
+func (r *Rule) getErrorMessage(message, key string) string {
+	if r.loc == nil {
+		return message
+	}
+
+	return fmt.Sprintf(r.loc.Translate(message), key)
 }

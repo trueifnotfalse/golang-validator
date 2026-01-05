@@ -2,6 +2,7 @@ package geojson
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/trueifnotfalse/golang-validator/locale/en"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestPointPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPoint()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -34,7 +35,7 @@ func TestPointNegativeType(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key has wrong GeoJSON type.", err.Error())
+		assert.Equal(t, "types.geojson.type", err.Error())
 	}
 }
 
@@ -48,11 +49,29 @@ func TestPointNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPoint()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.point", err.Error())
+	}
+}
+
+func TestPointLocaleNegative(t *testing.T) {
+	testData := map[string]any{
+		"key": map[string]any{
+			"type": "Feature",
+			"geometry": map[string]any{
+				"type":        "Point",
+				"coordinates": []any{4, 7, 33},
+			},
+		},
+	}
+	r := NewPoint().SetLocale(en.New())
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "The key must be an valid GeoJSON Point.", err.Error())
 	}
 }
 
@@ -70,7 +89,7 @@ func TestPointSingleCoordinateNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.valid", err.Error())
 	}
 }
 
@@ -84,7 +103,7 @@ func TestLineStringPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewLineString()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -99,11 +118,11 @@ func TestLineStringSinglePointNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewLineString()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.line.string", err.Error())
 	}
 }
 
@@ -117,11 +136,11 @@ func TestLineStringStringCoordinateNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewLineString()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.line.string", err.Error())
 	}
 }
 
@@ -135,11 +154,11 @@ func TestLineStringEmptyNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewLineString()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.line.string", err.Error())
 	}
 }
 
@@ -153,7 +172,7 @@ func TestPolygonPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -171,7 +190,7 @@ func TestPolygonWithCutPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -186,11 +205,11 @@ func TestPolygonFirstAndLastPointsNotEqualNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.polygon", err.Error())
 	}
 }
 
@@ -204,11 +223,11 @@ func TestPolygonLengthLessThanFourNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.polygon", err.Error())
 	}
 }
 
@@ -225,11 +244,11 @@ func TestPolygonWithCutLengthLessThanFourNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.polygon", err.Error())
 	}
 }
 
@@ -246,11 +265,11 @@ func TestPolygonWithCutFirstAndLastPointsNotEqualNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.polygon", err.Error())
 	}
 }
 
@@ -264,11 +283,11 @@ func TestPolygonEmptyNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.polygon", err.Error())
 	}
 }
 
@@ -282,7 +301,7 @@ func TestMultiPointPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPoint()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -297,7 +316,7 @@ func TestMultiPointSinglePointPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPoint()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -312,11 +331,11 @@ func TestMultiPointPolygonNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPoint()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.multi.point", err.Error())
 	}
 }
 
@@ -330,11 +349,11 @@ func TestMultiPointEmptyNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPoint()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.multi.point", err.Error())
 	}
 }
 
@@ -351,7 +370,7 @@ func TestMultiLineStringPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiLineString()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -366,11 +385,11 @@ func TestMultiLineStringEmptyNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiLineString()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.multi.line.string", err.Error())
 	}
 }
 
@@ -393,7 +412,7 @@ func TestMultiPolygonPositive(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPolygon()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -408,11 +427,11 @@ func TestMultiPolygonEmptyNegative(t *testing.T) {
 			},
 		},
 	}
-	r := New()
+	r := NewMultiPolygon()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an valid GeoJSON.", err.Error())
+		assert.Equal(t, "types.geojson.multi.polygon", err.Error())
 	}
 }
 

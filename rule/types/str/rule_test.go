@@ -1,70 +1,64 @@
-package v4
+package str
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/trueifnotfalse/golang-validator/locale/en"
-	"testing"
 )
 
-func TestPositive(t *testing.T) {
+func TestStringPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": "192.168.10.56",
+		"key": "qwerty",
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestWhitePositive(t *testing.T) {
+func TestIntPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": "8.8.8.8",
+		"key": "432",
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestLocalHostPositive(t *testing.T) {
+func TestIntNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "127.0.0.1",
-	}
-	r := New()
-	err := r.Valid("key", testData)
-	assert.Nil(t, err)
-}
-
-func TestRandomStringNegative(t *testing.T) {
-	testData := map[string]any{
-		"key": "1dzxjc6suj3dnadjkfbn",
+		"key": 20,
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "types.ip.v4", err.Error())
+		assert.Equal(t, "types.str", err.Error())
 	}
 }
 
-func TestRandomStringLocaleNegative(t *testing.T) {
+func TestIntLocaleNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "1dzxjc6suj3dnadjkfbn",
+		"key": 20,
 	}
 	r := New().SetLocale(en.New())
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be a valid IPv4 address.", err.Error())
+		assert.Equal(t, "The key must be an string.", err.Error())
 	}
 }
 
-func TestRangeNegative(t *testing.T) {
+func TestObjectNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "8.318.8.8",
+		"key": map[string]any{
+			"20":56,
+		},
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "types.ip.v4", err.Error())
+		assert.Equal(t, "types.str", err.Error())
 	}
 }

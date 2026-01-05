@@ -1,8 +1,10 @@
 package http
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/trueifnotfalse/golang-validator/locale/en"
 )
 
 func TestHttpPositive(t *testing.T) {
@@ -31,7 +33,7 @@ func TestSchemaNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key format is not HTTP URL.", err.Error())
+		assert.Equal(t, "types.url.http", err.Error())
 	}
 }
 
@@ -40,6 +42,18 @@ func TestHostEmptyNegative(t *testing.T) {
 		"key": "http://",
 	}
 	r := New()
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "types.url.http", err.Error())
+	}
+}
+
+func TestHostEmptyLocaleNegative(t *testing.T) {
+	testData := map[string]any{
+		"key": "http://",
+	}
+	r := New().SetLocale(en.New())
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {

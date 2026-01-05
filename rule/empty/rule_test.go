@@ -1,4 +1,4 @@
-package v4
+package empty
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -6,65 +6,77 @@ import (
 	"testing"
 )
 
-func TestPositive(t *testing.T) {
+func TestStringPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": "192.168.10.56",
+		"key": "",
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestWhitePositive(t *testing.T) {
+func TestIntPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": "8.8.8.8",
+		"key": 0,
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestLocalHostPositive(t *testing.T) {
+func TestArrayPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": "127.0.0.1",
+		"key": []int8{},
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestRandomStringNegative(t *testing.T) {
+func TestStringNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "1dzxjc6suj3dnadjkfbn",
+		"key": "qwe",
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "types.ip.v4", err.Error())
+		assert.Equal(t, "empty", err.Error())
 	}
 }
 
-func TestRandomStringLocaleNegative(t *testing.T) {
+func TestStringLocaleNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "1dzxjc6suj3dnadjkfbn",
+		"key": "qwe",
 	}
 	r := New().SetLocale(en.New())
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be a valid IPv4 address.", err.Error())
+		assert.Equal(t, "The key must be empty.", err.Error())
 	}
 }
 
-func TestRangeNegative(t *testing.T) {
+func TestIntNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": "8.318.8.8",
+		"key": 10,
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "types.ip.v4", err.Error())
+		assert.Equal(t, "empty", err.Error())
+	}
+}
+
+func TestArrayNegative(t *testing.T) {
+	testData := map[string]any{
+		"key": []int8{2, 5, 23},
+	}
+	r := New()
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "empty", err.Error())
 	}
 }

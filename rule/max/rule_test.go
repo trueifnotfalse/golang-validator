@@ -2,6 +2,7 @@ package max
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/trueifnotfalse/golang-validator/locale/en"
 	"testing"
 )
 
@@ -19,6 +20,18 @@ func TestSliceNegative(t *testing.T) {
 		"key": []uint8{10, 5, 6, 4, 6},
 	}
 	r := New(4)
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "max.array", err.Error())
+	}
+}
+
+func TestSliceLocaleNegative(t *testing.T) {
+	testData := map[string]any{
+		"key": []uint8{10, 5, 6, 4, 6},
+	}
+	r := New(4).SetLocale(en.New())
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
@@ -43,7 +56,7 @@ func TestMapNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must not have more than 4 items.", err.Error())
+		assert.Equal(t, "max.array", err.Error())
 	}
 }
 
@@ -64,7 +77,7 @@ func TestStringNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must not be greater than 4 characters.", err.Error())
+		assert.Equal(t, "max.string", err.Error())
 	}
 }
 
@@ -85,7 +98,7 @@ func TestIntNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must not be greater than 94.", err.Error())
+		assert.Equal(t, "max.numeric", err.Error())
 	}
 }
 
@@ -106,6 +119,6 @@ func TestFloatNegative(t *testing.T) {
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must not be greater than 94.", err.Error())
+		assert.Equal(t, "max.numeric", err.Error())
 	}
 }

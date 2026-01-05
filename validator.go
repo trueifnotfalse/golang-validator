@@ -3,33 +3,49 @@ package validator
 import (
 	"bytes"
 	"github.com/goccy/go-json"
+	"github.com/trueifnotfalse/golang-validator/interface/locale"
+	"github.com/trueifnotfalse/golang-validator/locale/en"
 )
 
-func Validate(body []byte, rules Rules) Errors {
+type Validator struct {
+	loc locale.Interface
+}
+
+func New() *Validator {
+	return &Validator{}
+}
+
+func (r *Validator) SetLocale(v locale.Interface) *Validator {
+	r.loc = v
+	return r
+}
+
+func (r *Validator) Validate(body []byte, rules Rules) Errors {
 	var (
 		t   map[string]any
 		err error
 	)
 	if len(body) == 0 {
-		return Map(t, rules)
+		return r.Map(t, rules)
 	}
-	t, err = decodeBody(body)
+	t, err = r.decodeBody(body)
 	if err != nil {
 		return Errors{"0": {err}}
 	}
 
-	return Map(t, rules)
+	return r.Map(t, rules)
 }
 
-func Map(values map[string]any, rules Rules) Errors {
+func (r *Validator) Map(values map[string]any, rules Rules) Errors {
 	var (
 		err error
 		i   int
 	)
+	l := r.getLocale()
 	result := make(Errors)
 	for k, rl := range rules {
 		for i = 0; i < len(rl); i++ {
-			err = rl[i].Valid(k, values)
+			err = rl[i].SetLocale(l).Valid(k, values)
 			if err != nil {
 				result[k] = append(result[k], err)
 			}
@@ -39,7 +55,7 @@ func Map(values map[string]any, rules Rules) Errors {
 	return result
 }
 
-func decodeBody(body []byte) (map[string]any, error) {
+func (r *Validator) decodeBody(body []byte) (map[string]any, error) {
 	var t map[string]any
 	reader := bytes.NewReader(body)
 	decoder := json.NewDecoder(reader)
@@ -49,4 +65,15 @@ func decodeBody(body []byte) (map[string]any, error) {
 		return nil, err
 	}
 	return t, nil
+}
+
+func (r *Validator) getLocale() locale.Interface {
+	if r.loc != nil {
+		return r.loc
+	}
+	return r.getDefaultLocale()
+}
+
+func (r *Validator) getDefaultLocale() locale.Interface {
+	return en.New()
 }

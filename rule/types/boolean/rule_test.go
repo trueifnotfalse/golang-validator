@@ -1,41 +1,52 @@
-package object
+package boolean
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/trueifnotfalse/golang-validator/locale/en"
+	"testing"
 )
 
 func TestPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": map[string]uint8{"key": 8},
+		"key": true,
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
 
-func TestNegative(t *testing.T) {
+func TestIntNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": []uint8{10, 5, 6, 4, 6},
+		"key": 1,
 	}
 	r := New()
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "types.object", err.Error())
+		assert.Equal(t, "types.boolean", err.Error())
 	}
 }
 
-func TestLocaleNegative(t *testing.T) {
+func TestStringNegative(t *testing.T) {
 	testData := map[string]any{
-		"key": []uint8{10, 5, 6, 4, 6},
+		"key": "true",
+	}
+	r := New()
+	err := r.Valid("key", testData)
+	assert.NotNil(t, err)
+	if err != nil {
+		assert.Equal(t, "types.boolean", err.Error())
+	}
+}
+
+func TestStringLocaleNegative(t *testing.T) {
+	testData := map[string]any{
+		"key": "true",
 	}
 	r := New().SetLocale(en.New())
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {
-		assert.Equal(t, "The key must be an object.", err.Error())
+		assert.Equal(t, "The key must be an boolean.", err.Error())
 	}
 }
