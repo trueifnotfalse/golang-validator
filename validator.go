@@ -12,7 +12,9 @@ type Validator struct {
 }
 
 func New() *Validator {
-	return &Validator{}
+	return &Validator{
+		loc: getDefaultLocale(),
+	}
 }
 
 func (r *Validator) SetLocale(v locale.Interface) *Validator {
@@ -71,9 +73,9 @@ func (r *Validator) getLocale() locale.Interface {
 	if r.loc != nil {
 		return r.loc
 	}
-	return r.getDefaultLocale()
+	return getDefaultLocale()
 }
 
-func (r *Validator) getDefaultLocale() locale.Interface {
+func getDefaultLocale() locale.Interface {
 	return en.New()
 }
