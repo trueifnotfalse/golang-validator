@@ -114,9 +114,9 @@ func TestIntNegative(t *testing.T) {
 
 func TestFloatPositive(t *testing.T) {
 	testData := map[string]any{
-		"key": 97.45,
+		"key": 7.45,
 	}
-	r := New(94)
+	r := New(7.41)
 	err := r.Valid("key", testData)
 	assert.Nil(t, err)
 }
@@ -125,7 +125,7 @@ func TestFloatNegative(t *testing.T) {
 	testData := map[string]any{
 		"key": 94.1,
 	}
-	r := New(100)
+	r := New(94.12)
 	err := r.Valid("key", testData)
 	assert.NotNil(t, err)
 	if err != nil {

@@ -89,7 +89,7 @@ func Each(rules ...rule.Interface) rule.Interface {
 	return each.New(rules...)
 }
 
-func In[V int64 | int32 | int16 | int8 | uint64 | uint32 | uint16 | uint8 | string](v []V) rule.Interface  {
+func In[V int64 | int32 | int16 | int8 | uint64 | uint32 | uint16 | uint8 | string](v []V) rule.Interface {
 	return in.New(v)
 }
 
@@ -101,11 +101,11 @@ func NotEmpty() rule.Interface {
 	return notEmpty.New()
 }
 
-func Max(v int64) rule.Interface {
+func Max[T int | float64](v T) rule.Interface {
 	return max.New(v)
 }
 
-func Min(v int64) rule.Interface {
+func Min[T int | float64](v T) rule.Interface {
 	return min.New(v)
 }
 
