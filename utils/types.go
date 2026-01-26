@@ -107,7 +107,7 @@ func ToFloat(v string) (float64, bool) {
 	if !isType(v, float) {
 		return 0, false
 	}
-	i, err := strconv.ParseFloat(v, 10)
+	i, err := strconv.ParseFloat(v, 64)
 	if err != nil {
 		return 0, false
 	}
@@ -141,20 +141,12 @@ func IsArray(v any) bool {
 
 func IsMap(v any) bool {
 	rv := reflect.ValueOf(v)
-	if rv.Kind() == reflect.Map {
-		return true
-	}
-
-	return false
+	return rv.Kind() == reflect.Map
 }
 
 func IsBool(v any) bool {
 	rv := reflect.ValueOf(v)
-	if rv.Kind() == reflect.Bool {
-		return true
-	}
-
-	return false
+	return rv.Kind() == reflect.Bool
 }
 
 func Type(v any) reflect.Kind {

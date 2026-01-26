@@ -69,6 +69,15 @@ func TestStringPositive(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestStringUnicodePositive(t *testing.T) {
+	testData := map[string]any{
+		"key": "asфы作為としてինչպեսजियां ཇི་བཞིནथेאַזויເປັນजेकि",
+	}
+	r := New(43)
+	err := r.Valid("key", testData)
+	assert.Nil(t, err)
+}
+
 func TestStringNegative(t *testing.T) {
 	testData := map[string]any{
 		"key": "asdqerrtda",

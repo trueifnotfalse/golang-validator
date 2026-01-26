@@ -7,6 +7,7 @@ import (
 	"github.com/trueifnotfalse/golang-validator/interface/rule"
 	"github.com/trueifnotfalse/golang-validator/utils"
 	"reflect"
+	"unicode/utf8"
 )
 
 type Rule struct {
@@ -46,7 +47,7 @@ func (r *Rule) Valid(key string, values map[string]any) error {
 	}
 	s := utils.ToString(v)
 	if utils.IsString(v) {
-		if int64(len(s)) < r.size {
+		if int64(utf8.RuneCountInString(s)) < r.size {
 			return errors.New(r.getErrorMessage(r.messageString, key, r.size))
 		}
 		return nil
